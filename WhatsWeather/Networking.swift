@@ -21,7 +21,7 @@ class GetWeather {
                     do {
                         let weathery = try JSONDecoder().decode(WeatherModel.self, from: data)
                         let cityName = weathery.name
-                        let cityTemp = String(Int(weathery.main.temp - 273.15)) + "°"
+                        let cityTemp = weathery.main.temp.KalvinToCalsius
                         let weatherIcon = weathery.weather.first?.icon
                         completion(Temperature(city: cityName, cityTemperature: cityTemp, tempIcon:     weatherIcon!))
                     } catch let jsonError {

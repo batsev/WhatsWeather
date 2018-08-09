@@ -31,3 +31,9 @@ extension UIView{
         }
     }
 }
+
+extension Double {
+    var KalvinToCalsius: String{
+        return String(Int(self - 273.15))+"°"
+    }
+}

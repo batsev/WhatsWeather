@@ -39,7 +39,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
                         }
                     }
                     return
-                    
                 }
                 self.cityWeather?.append(temp)
                 if networkCallsDone == self.cities.count {
@@ -47,7 +46,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
                         self.collectionView?.reloadData()
                     }
                 }
-                
             }
         }
     }
