@@ -8,9 +8,22 @@
 
 import UIKit
 
-class ChoiceController: UIViewController {
+class ChoiceController: UITableViewController, UISearchBarDelegate {
+    lazy var searchBar: UISearchBar = UISearchBar()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
+        searchBar.searchBarStyle = UISearchBarStyle.prominent
+        searchBar.placeholder = "Search..."
+        searchBar.sizeToFit()
+        searchBar.isTranslucent = false
+        //searchBar.backgroundImage = UIImage()
+        searchBar.delegate = self
+        navigationItem.titleView = searchBar
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange textSearched: String){
+        
+    }
+    
 }

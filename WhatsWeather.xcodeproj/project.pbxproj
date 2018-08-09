@@ -9,20 +9,19 @@
 /* Begin PBXBuildFile section */
 		87C5BA482118303400338C70 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C5BA472118303400338C70 /* AppDelegate.swift */; };
 		87C5BA4A2118303400338C70 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C5BA492118303400338C70 /* ViewController.swift */; };
-		87C5BA4F2118303600338C70 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87C5BA4E2118303600338C70 /* Assets.xcassets */; };
 		87C5BA522118303600338C70 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87C5BA502118303600338C70 /* LaunchScreen.storyboard */; };
 		87C5BA5A211846F100338C70 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C5BA59211846F100338C70 /* WeatherModel.swift */; };
 		87C5BA5C21185BAF00338C70 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C5BA5B21185BAF00338C70 /* Extensions.swift */; };
 		87C5BA5E2118D21200338C70 /* ChoiceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C5BA5D2118D21200338C70 /* ChoiceController.swift */; };
 		87C5BA60211AFB8B00338C70 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C5BA5F211AFB8B00338C70 /* CustomCell.swift */; };
 		87C5BA62211AFBBF00338C70 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C5BA61211AFBBF00338C70 /* Networking.swift */; };
+		87D2D031211CBF6300127B68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87D2D030211CBF6300127B68 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		87C5BA442118303400338C70 /* WhatsWeather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatsWeather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87C5BA472118303400338C70 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		87C5BA492118303400338C70 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		87C5BA4E2118303600338C70 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		87C5BA512118303600338C70 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		87C5BA532118303600338C70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		87C5BA59211846F100338C70 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
@@ -30,6 +29,7 @@
 		87C5BA5D2118D21200338C70 /* ChoiceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceController.swift; sourceTree = "<group>"; };
 		87C5BA5F211AFB8B00338C70 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
 		87C5BA61211AFBBF00338C70 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		87D2D030211CBF6300127B68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,8 +69,8 @@
 				87C5BA5B21185BAF00338C70 /* Extensions.swift */,
 				87C5BA5D2118D21200338C70 /* ChoiceController.swift */,
 				87C5BA472118303400338C70 /* AppDelegate.swift */,
-				87C5BA4E2118303600338C70 /* Assets.xcassets */,
 				87C5BA502118303600338C70 /* LaunchScreen.storyboard */,
+				87D2D030211CBF6300127B68 /* Assets.xcassets */,
 				87C5BA532118303600338C70 /* Info.plist */,
 			);
 			path = WhatsWeather;
@@ -134,8 +134,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87D2D031211CBF6300127B68 /* Assets.xcassets in Resources */,
 				87C5BA522118303600338C70 /* LaunchScreen.storyboard in Resources */,
-				87C5BA4F2118303600338C70 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

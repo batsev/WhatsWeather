@@ -17,13 +17,22 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchWeather()
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
         collectionView?.backgroundColor = .white
         collectionView?.alwaysBounceVertical = true
         collectionView?.contentInset = UIEdgeInsets(top: 35, left: 20, bottom: 0, right: 20)
         collectionView?.register(CustomCell.self, forCellWithReuseIdentifier: cellId)
+        //navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: #selector(addCity))
         [getWeatherButton].forEach { view.addSubview($0) }
         getWeatherButton.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: nil, bottom: nil, trail: view.safeAreaLayoutGuide.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 0, right: 20), size: .init(width: 25, height: 25))
     }
+    let getWeatherButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(#imageLiteral(resourceName: "plusSign").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(addCity), for: .touchUpInside)
+        return button
+    }()
     
     func fetchWeather(){
         let weatherGetter = GetWeather()
@@ -48,20 +57,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 }
             }
         }
+    }    
+    @objc func addCity(){
+        let choiceController = ChoiceController()
+        present(UINavigationController(rootViewController: choiceController), animated: true, completion: nil)
     }
-    
-    let getWeatherButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(#imageLiteral(resourceName: "plusSign").withRenderingMode(.alwaysOriginal), for: .normal)
-        //button.addTarget(self, action: #selector(addCity), for: .touchUpInside)
-        return button
-    }()
-    
-//    @objc func addCity(){
-//        let choiceController = ChoiceController()
-//        present(choiceController, animated: true, completion: nil)
-//    }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cityWeather?.count ?? 0
