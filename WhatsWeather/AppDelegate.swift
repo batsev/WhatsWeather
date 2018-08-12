@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        let vc = ViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        let vc = WeatherController(collectionViewLayout: UICollectionViewFlowLayout())
         window?.rootViewController = UINavigationController(rootViewController: vc)
         return true
     }

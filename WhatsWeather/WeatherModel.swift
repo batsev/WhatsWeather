@@ -11,7 +11,12 @@ import Foundation
 struct WeatherModel: Decodable {
     let name: String
     let main: Main
+    let sys: Sys
     let weather: [Weather]
+}
+
+struct Sys: Decodable {
+    let country: String
 }
 
 struct Weather: Decodable {
@@ -27,4 +32,5 @@ struct Temperature {
     let city: String
     let cityTemperature: String
     let tempIcon: String
+    let country: String
 }

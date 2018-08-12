@@ -13,7 +13,8 @@ class GetWeather {
     private let openWeatherAPIKey = "4a962855f207070356a7439004d3e2e5"
     private let openWeatherIcon = "http://openweathermap.org/img/w"
     func getWeather(city: String, completion: @escaping (Temperature?) -> Void){
-        let weatherRequest = "\(openWeatherBaseUrl)?q=\(city)&APPID=\(openWeatherAPIKey)"
+        let cityUrl = city.replacingOccurrences(of: " ", with: "+")
+        let weatherRequest = "\(openWeatherBaseUrl)?q=\(cityUrl)&APPID=\(openWeatherAPIKey)"
         if let weatherRequestURL = URL(string: weatherRequest) {
             DispatchQueue.main.async {
                 URLSession.shared.dataTask(with: weatherRequestURL) { (data, response, error) in
@@ -23,7 +24,8 @@ class GetWeather {
                         let cityName = weathery.name
                         let cityTemp = weathery.main.temp.KalvinToCalsius
                         let weatherIcon = weathery.weather.first?.icon
-                        completion(Temperature(city: cityName, cityTemperature: cityTemp, tempIcon:     weatherIcon!))
+                        let countryName = weathery.sys.country
+                        completion(Temperature(city: cityName, cityTemperature: cityTemp, tempIcon:     weatherIcon!, country: countryName))
                     } catch let jsonError {
                         print(jsonError)
                         completion(nil)
