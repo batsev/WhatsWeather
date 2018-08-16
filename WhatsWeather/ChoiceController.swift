@@ -11,7 +11,7 @@ import UIKit
 class ChoiceController: UITableViewController, UISearchBarDelegate {
     lazy var searchBar: UISearchBar = UISearchBar()
     
-    var delegate: MyProtocol?
+    var delegate: AddCityProtocol?
 
     var temperature: Temperature?
     
@@ -69,6 +69,6 @@ class ChoiceController: UITableViewController, UISearchBarDelegate {
     
 }
 
-protocol MyProtocol {
+protocol AddCityProtocol {
     func setNewCity(valueSent: Temperature)
 }
