@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol CustomCellDelegate: AnyObject {
-    func delete(cell: CustomCell)
+protocol CurrentWeatherCellDelegate: AnyObject {
+    func delete(cell: CurrentWeatherCell)
 }
 
-class CustomCell: UICollectionViewCell{
+class CurrentWeatherCell: UICollectionViewCell{
     
-    weak var delegate: CustomCellDelegate?
+    weak var delegate: CurrentWeatherCellDelegate?
     
     var temperature: Temperature? {
         didSet{
@@ -28,7 +28,7 @@ class CustomCell: UICollectionViewCell{
                     }
                 }
             }
-            deleteButton.isHidden = !isEditing
+            deleteButton.isHidden = true
         }
     }
     override init(frame: CGRect) {
@@ -73,7 +73,6 @@ class CustomCell: UICollectionViewCell{
     let deleteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "delete1").withRenderingMode(.alwaysOriginal), for: .normal)
-        button.addTarget(self, action: #selector(deleteButtonDidTap), for: .touchUpInside)
         return button
     }()
     
@@ -84,11 +83,13 @@ class CustomCell: UICollectionViewCell{
     private func setupViews(){
         [weatherView, cityName, weatherImage, temp, deleteButton].forEach { addSubview($0) }
         weatherView.anchor(top: self.topAnchor, leading: self.leadingAnchor, bottom: self.bottomAnchor, trail: self.trailingAnchor)
-        cityName.anchor(top: nil, leading: self.leadingAnchor, bottom: self.bottomAnchor, trail: self.trailingAnchor, padding: .init(top: 0, left: 5, bottom: 10, right: 5), size: .init(width: 0, height: 30))
-        temp.anchor(top: nil, leading: self.leadingAnchor, bottom: cityName.topAnchor, trail: self.trailingAnchor, padding: .init(top: 0, left: 20, bottom: 5, right: 5), size: .init(width: 0, height: 80))
-        weatherImage.anchor(top: self.topAnchor, leading: self.leadingAnchor, bottom: nil, trail: self.trailingAnchor, size: .init(width: 0, height: 50))
+        cityName.anchor(top: nil, leading: self.leadingAnchor, bottom: self.bottomAnchor, trail: self.trailingAnchor, padding: .init(top: 0, left: 5, bottom: 10, right: 5), size: .init(width: 0, height: 20))
+//        temp.anchor(top: nil, leading: self.leadingAnchor, bottom: cityName.topAnchor, trail: self.trailingAnchor, padding: .init(top: 0, left: 20, bottom: 0, right: 5), size: .init(width: 0, height: 80))
+//        temp.centerAnchor(centerX: self.centerXAnchor, centerY: self.centerYAnchor, size: .init(width: 120, height: 80))
+        temp.anchor(top: nil, leading: nil, bottom: nil, trail: nil, centerX: self.centerXAnchor, centerY: self.centerYAnchor, size: .init(width: 120, height: 80))
+        weatherImage.anchor(top: self.topAnchor, leading: self.leadingAnchor, bottom: nil, trail: self.trailingAnchor,padding: .init(top: 0, left: 0, bottom: 10, right: 0) , size: .init(width: 0, height: 50))
         deleteButton.anchor(top: self.topAnchor, leading: nil, bottom: nil, trail: self.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: .init(width: 24, height: 24))
-        
+        deleteButton.addTarget(self, action: #selector(deleteButtonDidTap), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -9,32 +9,47 @@
 import Foundation
 
 class GetWeather {
-    private let openWeatherBaseUrl = "http://api.openweathermap.org/data/2.5/weather"
+    private let openWeatherBaseUrl = "http://api.openweathermap.org/data/2.5/"
     private let openWeatherAPIKey = "4a962855f207070356a7439004d3e2e5"
     private let openWeatherIcon = "http://openweathermap.org/img/w"
     func getWeather(city: String, completion: @escaping (Temperature?) -> Void){
         let cityUrl = city.replacingOccurrences(of: " ", with: "+")
-        let weatherRequest = "\(openWeatherBaseUrl)?q=\(cityUrl)&APPID=\(openWeatherAPIKey)"
+        let weatherRequest = "\(openWeatherBaseUrl)weather?q=\(cityUrl)&APPID=\(openWeatherAPIKey)"
         if let weatherRequestURL = URL(string: weatherRequest) {
             DispatchQueue.main.async {
                 URLSession.shared.dataTask(with: weatherRequestURL) { (data, response, error) in
                     guard let data = data else {return}
                     do {
-                        let weathery = try JSONDecoder().decode(WeatherModel.self, from: data)
-                        let cityName = weathery.name
-                        let cityTemp = weathery.main.temp.KalvinToCalsius
-                        let weatherIcon = weathery.weather.first?.icon
-                        let countryName = weathery.sys.country
-                        completion(Temperature(city: cityName, cityTemperature: cityTemp, tempIcon:     weatherIcon!, country: countryName))
+                        let weather = try JSONDecoder().decode(WeatherModel.self, from: data)
+                        completion(WeatherModel.getTemperature(weather: weather))
+                        //completion(weather)
                     } catch let jsonError {
                         print(jsonError)
                         completion(nil)
                     }
-                    
                     }.resume()
             }
         }
-        
+    }
+    func getForecast(city: String, completion: @escaping ([ForecastTemperature]?) -> Void){
+        let cityUrl = city.replacingOccurrences(of: " ", with: "+")
+        let forecastRequest = "\(openWeatherBaseUrl)forecast?q=\(cityUrl)&APPID=\(openWeatherAPIKey)"
+        if let forecastUrl = URL(string: forecastRequest){
+            DispatchQueue.main.async {
+                URLSession.shared.dataTask(with: forecastUrl, completionHandler: { (data, response, error) in
+                    guard let data = data else {return}
+                    do {
+                        let forecast = try JSONDecoder().decode(ForecastModel.self, from: data)
+                        completion(ForecastTemperature.getForecast(forecast: forecast))
+                    } catch let jsonError{
+                        print(jsonError)
+                        completion(nil)
+                    }
+//                    let dataString = String(data: data, encoding: .utf8)
+//                    print(dataString!)
+                }).resume()
+            }
+        }
     }
     
     func getWeatherIcon(icon: String, completion: @escaping (Data?) -> Void){
@@ -49,7 +64,5 @@ class GetWeather {
                 completion(data)
             }.resume()
         }
-        
     }
-    
 }

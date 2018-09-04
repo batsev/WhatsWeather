@@ -8,12 +8,14 @@
 
 import UIKit
 
-class ChoiceController: UITableViewController, UISearchBarDelegate {
+class SearchController: UITableViewController, UISearchBarDelegate {
+    
     lazy var searchBar: UISearchBar = UISearchBar()
     
     var delegate: AddCityProtocol?
 
     var temperature: Temperature?
+    //var myWeather: MyWeather?
     
     let cellId = "cellId"
     
@@ -23,9 +25,7 @@ class ChoiceController: UITableViewController, UISearchBarDelegate {
         searchBar.placeholder = "Search..."
         searchBar.sizeToFit()
         searchBar.isTranslucent = false
-        //searchBar.backgroundImage = UIImage()
         searchBar.delegate = self
-//        tableView.register(myCell.self, forCellReuseIdentifier: cellId)
         navigationItem.titleView = searchBar
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancel))
     }
@@ -35,7 +35,8 @@ class ChoiceController: UITableViewController, UISearchBarDelegate {
             let weatherGetter = GetWeather()
             weatherGetter.getWeather(city: newCity) { (temp) in
                 guard let temp = temp else {return}
-                self.temperature = Temperature(city: temp.city, cityTemperature: temp.cityTemperature, tempIcon: temp.tempIcon, country: temp.country)
+                //self.myWeather = MyWeather.createMyWeather(weather: temp)
+                self.temperature = Temperature(city: temp.city, cityTemperature: temp.cityTemperature, tempIcon: temp.tempIcon, country: temp.country, weatherDescription: temp.weatherDescription)
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -49,6 +50,8 @@ class ChoiceController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellId)
+        //let myWeather = MyWeather(context: PersistenceManager.shared.context)
+        //if let cityTemp = myWeather?.city, let cityCountry = myWeather?.country {
         if let cityTemp = temperature?.city, let cityCountry = temperature?.country {
             cell.textLabel?.text = "\(cityTemp), \(cityCountry)"
         }
@@ -62,7 +65,8 @@ class ChoiceController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         dismiss(animated: true) {
             if let newCity = self.temperature{
-                self.delegate?.setNewCity(valueSent: newCity)
+                self.delegate?.appendNewCityToCollectionView(valueSent: newCity)
+                //PersistenceManager.shared.save()
             }
         }
     }
@@ -70,5 +74,5 @@ class ChoiceController: UITableViewController, UISearchBarDelegate {
 }
 
 protocol AddCityProtocol {
-    func setNewCity(valueSent: Temperature)
+    func appendNewCityToCollectionView(valueSent: Temperature)
 }
