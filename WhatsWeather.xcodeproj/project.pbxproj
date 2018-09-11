@@ -90,7 +90,7 @@
 			children = (
 				87FED8C82134084100F922FB /* ViewControllers */,
 				87FED8C72134082600F922FB /* Models */,
-				87FED8CA2137C2C800F922FB /* Cells */,
+				87FED8CA2137C2C800F922FB /* Views */,
 				872D8DEF2147BB6200995F4A /* CoreData */,
 				87FED8A1212D20F200F922FB /* CustomLayout.swift */,
 				87C5BA61211AFBBF00338C70 /* Networking.swift */,
@@ -131,13 +131,13 @@
 			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
-		87FED8CA2137C2C800F922FB /* Cells */ = {
+		87FED8CA2137C2C800F922FB /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				87FED8CB2137C2EF00F922FB /* ForecastCell.swift */,
 				87C5BA5F211AFB8B00338C70 /* CurrentWeatherCell.swift */,
 			);
-			path = Cells;
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
