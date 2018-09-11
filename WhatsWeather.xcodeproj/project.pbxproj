@@ -59,6 +59,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		872D8DEF2147BB6200995F4A /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				87FED92721411C1200F922FB /* MyWeather+CoreDataClass.swift */,
+				87FED92821411C1200F922FB /* MyWeather+CoreDataProperties.swift */,
+				87FED922213D806C00F922FB /* PersistenceManager.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		87C5BA3B2118303400338C70 = {
 			isa = PBXGroup;
 			children = (
@@ -81,13 +91,11 @@
 				87FED8C82134084100F922FB /* ViewControllers */,
 				87FED8C72134082600F922FB /* Models */,
 				87FED8CA2137C2C800F922FB /* Cells */,
+				872D8DEF2147BB6200995F4A /* CoreData */,
 				87FED8A1212D20F200F922FB /* CustomLayout.swift */,
-				87FED92721411C1200F922FB /* MyWeather+CoreDataClass.swift */,
-				87FED92821411C1200F922FB /* MyWeather+CoreDataProperties.swift */,
-				87FED922213D806C00F922FB /* PersistenceManager.swift */,
-				87FED92421411B4000F922FB /* MyWeather.xcdatamodeld */,
 				87C5BA61211AFBBF00338C70 /* Networking.swift */,
 				87C5BA5B21185BAF00338C70 /* Extensions.swift */,
+				87FED92421411B4000F922FB /* MyWeather.xcdatamodeld */,
 				87C5BA532118303600338C70 /* Info.plist */,
 				87FED8C92134087E00F922FB /* SupportingFiles */,
 			);
