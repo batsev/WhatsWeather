@@ -20,10 +20,12 @@ class SearchController: UIViewController, UISearchBarDelegate, UITableViewDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavBar()
+        setupViews()
+    }
+    
+    func setupNavBar(){
         searchBar.becomeFirstResponder()
-        view.backgroundColor = .white
-        tableView.dataSource = self
-        tableView.delegate = self
         searchBar.searchBarStyle = UISearchBarStyle.prominent
         searchBar.placeholder = "Search..."
         searchBar.sizeToFit()
@@ -31,6 +33,12 @@ class SearchController: UIViewController, UISearchBarDelegate, UITableViewDataSo
         searchBar.delegate = self
         navigationItem.titleView = searchBar
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancel))
+    }
+    
+    func setupViews(){
+        tableView.dataSource = self
+        tableView.delegate = self
+        view.backgroundColor = .white
         [errorMessage, tableView].forEach { view.addSubview($0) }
         errorMessage.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: nil, trail: view.trailingAnchor, size: .init(width: 0, height: 44))
         tableView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trail: view.trailingAnchor)
