@@ -20,6 +20,9 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
 
     var firstCell: Bool!{
         didSet{
+            if let cityName = temperature?.city, let country = temperature?.country {
+                cityLabel.text = "\(cityName), \(country)"
+            }
             weatherDescriptionLabel.text = firstCell ? temperature?.weatherDescription : forecastTemperature?.forecast[5].weatherDescription
             temp.text = firstCell ? temperature?.cityTemperature : forecastTemperature?.forecast[5].cityTemperature
             let weatherGetter = GetWeather()
@@ -49,6 +52,7 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
         weatherDescriptionLabel.alpha = delta
         forecastCollectionView.alpha = delta
         temp.alpha = delta
+        cityLabel.alpha = delta
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -87,6 +91,13 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
         super.init(frame: frame)
         setupViews()
     }
+    
+    let cityLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "AvenirNext-DemiBold", size: 14)
+        label.textAlignment = .center
+        return label
+    }()
     
     let weekdayLabel: UILabel = {
         let label = UILabel()
@@ -127,13 +138,14 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
     }()
     
     func setupViews(){
-        [weatherIcon, weekdayLabel, weatherDescriptionLabel, forecastCollectionView, temp].forEach { addSubview($0) }
+        [cityLabel ,weatherIcon, weekdayLabel, weatherDescriptionLabel, forecastCollectionView, temp].forEach { addSubview($0) }
         forecastCollectionView.dataSource = self
         forecastCollectionView.delegate = self
         
         forecastCollectionView.register(SingleForecastCell.self, forCellWithReuseIdentifier: SingleForecastCell.identifier)
         weatherIcon.anchor(top: nil, leading: nil, bottom: nil, trail: nil, centerX: centerXAnchor, centerY: centerYAnchor, size: .init(width: 80, height: 80))
         weekdayLabel.anchor(top: topAnchor, leading: self.leadingAnchor, bottom: nil, trail: self.trailingAnchor, padding: .init(top: 50, left: 0, bottom: 0, right: 0), size: .init(width: 0, height: 44))
+        cityLabel.anchor(top: nil, leading: leadingAnchor, bottom: weekdayLabel.topAnchor, trail: trailingAnchor, size: .init(width: 0, height: 14))
         weatherDescriptionLabel.anchor(top: weekdayLabel.bottomAnchor, leading: leadingAnchor, bottom: nil, trail: trailingAnchor, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: .init(width: 0, height: 23))
         temp.anchor(top: nil, leading: nil, bottom: forecastCollectionView.topAnchor, trail: nil, centerX: centerXAnchor, padding: .init(top: 0, left: 0, bottom: -10, right: 0), size: .init(width: 60, height: 60))
         forecastCollectionView.anchor(top: nil, leading: self.leadingAnchor, bottom: self.bottomAnchor, trail: self.trailingAnchor, padding: .init(top: 0, left: 5, bottom: 3, right: 5), size: .init(width: 0, height: 80))
