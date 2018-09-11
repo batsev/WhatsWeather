@@ -19,7 +19,6 @@ class ForecastController: UICollectionViewController {
             weatherGetter.getForecast(city: cityName) { (temp) in
                 self.forecast = temp
                 DispatchQueue.main.async {
-//                    self.collectionView?.reloadData()
                     self.collectionView?.performBatchUpdates({
                         let indexSet = IndexSet(integersIn: 0...0)
                         self.collectionView?.reloadSections(indexSet)
@@ -34,7 +33,7 @@ class ForecastController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.decelerationRate = UIScrollViewDecelerationRateFast
-        collectionView?.backgroundColor = UIColor(white: 1, alpha: 0.8)
+        collectionView?.backgroundColor = UIColor(white: 1, alpha: 0.9)
         let layout = UltravisualLayout()
         collectionView!.collectionViewLayout = layout
         collectionView?.register(ForecastCell.self, forCellWithReuseIdentifier: ForecastCell.identifier)
@@ -45,13 +44,13 @@ class ForecastController: UICollectionViewController {
     @objc func swipeGestureRecognizerAction(_ gesture: UISwipeGestureRecognizer){
         dismiss(animated: true, completion: nil)
     }
-
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ForecastCell.identifier, for: indexPath) as! ForecastCell
-        //cell.contentView.backgroundColor = colors[indexPath.item]
-        cell.setGradientBackground(colorOne: colors[indexPath.item], colorTwo: colors[indexPath.item+1])
+        cell.contentView.backgroundColor = colors[indexPath.item]
         cell.forecastTemperature = forecast?[indexPath.item]
+        cell.temperature = self.temperature
+        cell.firstCell = indexPath.item == 0
         return cell
     }
     

@@ -13,7 +13,7 @@ class GetWeather {
     private let openWeatherAPIKey = "4a962855f207070356a7439004d3e2e5"
     private let openWeatherIcon = "http://openweathermap.org/img/w"
     func getWeather(city: String, completion: @escaping (Temperature?) -> Void){
-        let cityUrl = city.replacingOccurrences(of: " ", with: "+")
+        let cityUrl = city.getCityUrl
         let weatherRequest = "\(openWeatherBaseUrl)weather?q=\(cityUrl)&APPID=\(openWeatherAPIKey)"
         if let weatherRequestURL = URL(string: weatherRequest) {
             DispatchQueue.main.async {
@@ -22,7 +22,6 @@ class GetWeather {
                     do {
                         let weather = try JSONDecoder().decode(WeatherModel.self, from: data)
                         completion(WeatherModel.getTemperature(weather: weather))
-                        //completion(weather)
                     } catch let jsonError {
                         print(jsonError)
                         completion(nil)
@@ -32,7 +31,7 @@ class GetWeather {
         }
     }
     func getForecast(city: String, completion: @escaping ([ForecastTemperature]?) -> Void){
-        let cityUrl = city.replacingOccurrences(of: " ", with: "+")
+        let cityUrl = city.getCityUrl
         let forecastRequest = "\(openWeatherBaseUrl)forecast?q=\(cityUrl)&APPID=\(openWeatherAPIKey)"
         if let forecastUrl = URL(string: forecastRequest){
             DispatchQueue.main.async {
@@ -45,8 +44,6 @@ class GetWeather {
                         print(jsonError)
                         completion(nil)
                     }
-//                    let dataString = String(data: data, encoding: .utf8)
-//                    print(dataString!)
                 }).resume()
             }
         }

@@ -43,6 +43,13 @@ extension String {
     var getDate: String {
         return components(separatedBy: " ").first!
     }
+    var getTime: String{
+        return components(separatedBy: " ").last!
+    }
+    var timeOfTheDay: String{
+        let time = self.getTime
+        return String(time.prefix(5))
+    }
     var dayOfTheWeek: String{
         let today = self.getDate
         let formatter = DateFormatter()
@@ -51,6 +58,10 @@ extension String {
         let myCalendar = Calendar(identifier: .gregorian)
         let numberOfWeekDay = myCalendar.component(.weekday, from: todayDate)
         return numberOfWeekDay.getDayOfTheWeek
+    }
+    
+    var getCityUrl: String{
+        return self.replacingOccurrences(of: " ", with: "+").replacingOccurrences(of: ", ", with: ",")
     }
 }
 
@@ -78,7 +89,7 @@ extension Double {
 extension UIView {
     func setGradientBackground(colorOne: UIColor, colorTwo: UIColor){
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 280)
+        gradientLayer.frame = bounds
         gradientLayer.colors = [colorOne.cgColor, colorTwo.cgColor]
         gradientLayer.locations = [0.0, 1.0]
         gradientLayer.startPoint = CGPoint(x: 1.0, y: 1.0)
@@ -95,21 +106,11 @@ extension UIColor {
     
     class func palette() -> [UIColor] {
         let palette = [
-            UIColor.colorFromRGB(r: 85, g: 0, b: 255),
-            UIColor.colorFromRGB(r:170, g: 0, b: 170),
-            UIColor.colorFromRGB(r:85, g: 170, b: 85),
-            UIColor.colorFromRGB(r:0, g: 85, b: 0),
-            UIColor.colorFromRGB(r:255, g: 170, b: 0),
-            UIColor.colorFromRGB(r:255, g: 255, b: 0),
-            UIColor.colorFromRGB(r:255, g: 85, b: 0),
-            UIColor.colorFromRGB(r:0, g: 85, b: 85),
-            UIColor.colorFromRGB(r:0, g: 85, b: 255),
-            UIColor.colorFromRGB(r:170, g: 170, b: 255),
-            UIColor.colorFromRGB(r:85, g: 0, b: 0),
-            UIColor.colorFromRGB(r:170, g: 85, b: 85),
-            UIColor.colorFromRGB(r:170, g: 255, b: 0),
-            UIColor.colorFromRGB(r:85, g: 170, b: 255),
-            UIColor.colorFromRGB(r:0, g: 170, b: 170)
+            UIColor.colorFromRGB(r: 205, g: 92, b: 92),
+            UIColor.colorFromRGB(r:240, g: 128, b: 128),
+            UIColor.colorFromRGB(r:250, g: 128, b: 114),
+            UIColor.colorFromRGB(r:233, g: 150, b: 122),
+            UIColor.colorFromRGB(r:255, g: 160, b: 122)
         ]
         return palette
     }

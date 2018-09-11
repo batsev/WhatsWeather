@@ -11,24 +11,30 @@ import Foundation
 struct ForecastTemperature {
     let weekday: String
     let forecast: [Temperature]
+    let time: [String]
     
     static func getForecast(forecast: ForecastModel) -> [ForecastTemperature]{
         let cityName = forecast.city.name
         let country = forecast.city.country
         var forecastTemperature = [ForecastTemperature]()
         var temps = [Temperature]()
+        var times = [String]()
         var day = forecast.list.first?.dt_txt.dayOfTheWeek
         for threeHourForecast in forecast.list {
             if let weatherIcon = threeHourForecast.weather.first?.icon, let weatherDiscription = threeHourForecast.weather.first?.description{
                 let weekday = threeHourForecast.dt_txt.dayOfTheWeek
                 let temp = threeHourForecast.main.temp.kalvinToCalsius
+                let time = threeHourForecast.dt_txt.timeOfTheDay
                 if day == weekday {
                     temps.append(Temperature(city: cityName, cityTemperature: temp, tempIcon: weatherIcon, country: country, weatherDescription: weatherDiscription))
+                    times.append(time)
                 }
                 else {
-                    forecastTemperature.append(ForecastTemperature(weekday: day!, forecast: temps))
+                    forecastTemperature.append(ForecastTemperature(weekday: day!, forecast: temps, time: times))
                     day=weekday
+                    times=[]
                     temps=[]
+                    times.append(time)
                     temps.append(Temperature(city: cityName, cityTemperature: temp, tempIcon: weatherIcon, country: country, weatherDescription: weatherDiscription))
                 }
             }
