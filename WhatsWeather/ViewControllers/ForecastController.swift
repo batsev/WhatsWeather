@@ -10,14 +10,40 @@ import UIKit
 
 class ForecastController: UICollectionViewController {
     
-    let colors = UIColor.palette()
+    private let colors = UIColor.palette()
+    private let apiClient = APIClient()
     
     var temperature: Temperature?{
         didSet{
-            let weatherGetter = GetWeather()
             guard let cityName = temperature?.city else {return}
-            weatherGetter.getForecast(city: cityName) { (temp) in
-                self.forecast = temp
+            let request = ForecastRequest(name: cityName)
+            var forecastTemperature = [ForecastTemperature]()
+            apiClient.send(apiRequest: request) { (temp: ForecastModel) in
+                let cityName = temp.city.name
+                let country = temp.city.country
+                var temps = [Temperature]()
+                var times = [String]()
+                var day = temp.list.first?.dt_txt.dayOfTheWeek
+                for threeHourForecast in temp.list {
+                    if let weatherIcon = threeHourForecast.weather.first?.icon, let weatherDiscription = threeHourForecast.weather.first?.description{
+                        let weekday = threeHourForecast.dt_txt.dayOfTheWeek
+                        let temp = threeHourForecast.main.temp.kalvinToCalsius
+                        let time = threeHourForecast.dt_txt.timeOfTheDay
+                        if day == weekday {
+                            temps.append(Temperature(city: cityName, cityTemperature: temp, tempIcon: weatherIcon, country: country, weatherDescription: weatherDiscription))
+                            times.append(time)
+                        }
+                        else {
+                            forecastTemperature.append(ForecastTemperature(weekday: day!, forecast: temps, time: times))
+                            day=weekday
+                            times=[]
+                            temps=[]
+                            times.append(time)
+                            temps.append(Temperature(city: cityName, cityTemperature: temp, tempIcon: weatherIcon, country: country, weatherDescription: weatherDiscription))
+                        }
+                    }
+                }
+                self.forecast = forecastTemperature
                 DispatchQueue.main.async {
                     self.collectionView?.performBatchUpdates({
                         let indexSet = IndexSet(integersIn: 0...0)

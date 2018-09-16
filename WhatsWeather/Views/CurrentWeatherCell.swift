@@ -16,17 +16,20 @@ class CurrentWeatherCell: UICollectionViewCell{
     
     weak var delegate: CurrentWeatherCellDelegate?
     
+    private let apiClient = APIClient()
+    
     var temperature: Temperature? {
         didSet{
-            let weatherGetter = GetWeather()
             self.cityName.text = self.temperature?.city
             self.temp.text = self.temperature?.cityTemperature
-            weatherGetter.getWeatherIcon(icon: (self.temperature?.tempIcon)!) { (data) in
-                if let data = data {
-                    DispatchQueue.main.async {
-                        self.weatherImage.image = UIImage(data: data)
+            if let icon = self.temperature?.tempIcon {
+            apiClient.iconGetter(icon: icon) { (data) in
+                DispatchQueue.main.async {
+                    if let data = data {
+                    self.weatherImage.image = UIImage(data: data)
                     }
                 }
+            }
             }
             deleteButton.isHidden = true
         }
@@ -35,7 +38,7 @@ class CurrentWeatherCell: UICollectionViewCell{
         super.init(frame: frame)
         setupViews()
     }
-    let cityName: UILabel = {
+    private let cityName: UILabel = {
         let tv = UILabel()
         tv.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
         tv.backgroundColor = .clear
@@ -43,7 +46,7 @@ class CurrentWeatherCell: UICollectionViewCell{
         return tv
     }()
     
-    let temp: UILabel = {
+    private let temp: UILabel = {
         let tv = UILabel()
         tv.font = UIFont(name: "HelveticaNeue-Thin", size: 60)
         tv.backgroundColor = .clear
@@ -51,7 +54,7 @@ class CurrentWeatherCell: UICollectionViewCell{
         return tv
     }()
     
-    let weatherImage: UIImageView = {
+    private let weatherImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         return imageView
@@ -70,7 +73,7 @@ class CurrentWeatherCell: UICollectionViewCell{
         }
     }
     
-    let deleteButton: UIButton = {
+    private let deleteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "delete1").withRenderingMode(.alwaysOriginal), for: .normal)
         return button

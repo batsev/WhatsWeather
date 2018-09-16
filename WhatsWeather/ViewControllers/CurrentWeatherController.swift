@@ -13,6 +13,7 @@ class CurrentWeatherController: UICollectionViewController, UICollectionViewDele
     var weatherArray = [Temperature]()
     var coreDataArray = [MyWeather]()
     let colors = UIColor.palette()
+    private let apiClient = APIClient()
     
     func appendNewCityToCollectionView(valueSent: Temperature) {
         let context = PersistenceManager.shared.context
@@ -109,29 +110,40 @@ class CurrentWeatherController: UICollectionViewController, UICollectionViewDele
     }
     
     func fetchWeather(){
-        let weatherGetter = GetWeather()
         let myWeather = PersistenceManager.shared.fetch(MyWeather.self)
         self.coreDataArray = myWeather
-        var networkCallsDone = 0
+        //var networkCallsDone = 0
         myWeather.forEach({
             guard let city = $0.city else {return}
-            weatherGetter.getWeather(city: city) { (temp) in
-                networkCallsDone += 1
-                guard let temp = temp else {
-                    if networkCallsDone == myWeather.count{
-                        DispatchQueue.main.async {
-                            self.collectionView?.reloadData()
-                        }
-                    }
-                    return
-                }
-                self.weatherArray.append(temp)
-                if networkCallsDone == myWeather.count {
-                    DispatchQueue.main.async {
-                        self.collectionView?.reloadData()
-                    }
+            let request = WeatherRequest(name: city)
+            apiClient.send(apiRequest: request) { (temp: WeatherModel) in
+                let cityName = temp.name
+                let cityTemp = temp.main.temp.kalvinToCalsius
+                let countryName = temp.sys.country
+                guard let weatherIcon = temp.weather.first?.icon, let weatherDiscription = temp.weather.first?.description  else {return}
+                let temperature = Temperature(city: cityName, cityTemperature: cityTemp, tempIcon: weatherIcon, country: countryName, weatherDescription: weatherDiscription)
+                self.weatherArray.append(temperature)
+                DispatchQueue.main.async {
+                    self.collectionView?.reloadData()
                 }
             }
+//            weatherGetter.getWeather(city: city) { (temp) in
+//                networkCallsDone += 1
+//                guard let temp = temp else {
+//                    if networkCallsDone == myWeather.count{
+//                        DispatchQueue.main.async {
+//                            self.collectionView?.reloadData()
+//                        }
+//                    }
+//                    return
+//                }
+//                self.weatherArray.append(temp)
+//                if networkCallsDone == myWeather.count {
+//                    DispatchQueue.main.async {
+//                        self.collectionView?.reloadData()
+//                    }
+//                }
+//            }
         })
     }
 }

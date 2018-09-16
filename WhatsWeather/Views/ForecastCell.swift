@@ -16,6 +16,7 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
         }
     }
     
+    private let apiClient = APIClient()
     var temperature: Temperature?
 
     var firstCell: Bool!{
@@ -25,16 +26,23 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
             }
             weatherDescriptionLabel.text = firstCell ? temperature?.weatherDescription : forecastTemperature?.forecast[5].weatherDescription
             temp.text = firstCell ? temperature?.cityTemperature : forecastTemperature?.forecast[5].cityTemperature
-            let weatherGetter = GetWeather()
-            let icon = firstCell ? temperature?.tempIcon : (forecastTemperature?.forecast[5].tempIcon)!
-            weatherGetter.getWeatherIcon(icon: icon!) { (data) in
-                if let data = data {
+            if let icon = firstCell ? temperature?.tempIcon : (forecastTemperature?.forecast[5].tempIcon)!{
+                //            weatherGetter.getWeatherIcon(icon: icon!) { (data) in
+                //                if let data = data {
+                //                    DispatchQueue.main.async {
+                //                        self.weatherIcon.image = UIImage(data: data)
+                //                    }
+                //                }
+                //            }
+                apiClient.iconGetter(icon: icon) { (data) in
                     DispatchQueue.main.async {
-                        self.weatherIcon.image = UIImage(data: data)
+                        if let data = data {
+                            self.weatherIcon.image = UIImage(data: data)
+                        }
                     }
                 }
             }
-
+            
         }
     }
     
@@ -92,28 +100,28 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
         setupViews()
     }
     
-    let cityLabel: UILabel = {
+    private let cityLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "AvenirNext-DemiBold", size: 14)
         label.textAlignment = .center
         return label
     }()
     
-    let weekdayLabel: UILabel = {
+    private let weekdayLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "AvenirNext-DemiBold", size: 38)
         label.textAlignment = .center
         return label
     }()
     
-    let weatherDescriptionLabel: UILabel = {
+    private let weatherDescriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "AvenirNext-Medium", size: 17)
         label.textAlignment = .center
         return label
     }()
     
-    let forecastCollectionView: UICollectionView = {
+    private let forecastCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -121,7 +129,7 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
         return collectionView
     }()
     
-    let weatherIcon: UIImageView = {
+    private let weatherIcon: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage()
         iv.contentMode = .scaleAspectFill
@@ -129,7 +137,7 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
 
     }()
     
-    let temp: UILabel = {
+    private let temp: UILabel = {
         let tv = UILabel()
         tv.font = UIFont(name: "HelveticaNeue-Thin", size: 30)
         tv.backgroundColor = .clear
@@ -137,7 +145,7 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
         return tv
     }()
     
-    func setupViews(){
+    private func setupViews(){
         [cityLabel ,weatherIcon, weekdayLabel, weatherDescriptionLabel, forecastCollectionView, temp].forEach { addSubview($0) }
         forecastCollectionView.dataSource = self
         forecastCollectionView.delegate = self
@@ -158,17 +166,29 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
 
 class SingleForecastCell: UICollectionViewCell{
     
+    private let apiClient = APIClient()
+    
     var temperature: Temperature?{
         didSet{
-            let weatherGetter = GetWeather()
             temp.text = temperature?.cityTemperature
-            weatherGetter.getWeatherIcon(icon: (self.temperature?.tempIcon)!) { (data) in
-                if let data = data {
+            
+            if let icon = self.temperature?.tempIcon {
+                apiClient.iconGetter(icon: icon) { (data) in
                     DispatchQueue.main.async {
-                        self.weatherIcon.image = UIImage(data: data)
+                        if let data = data {
+                            self.weatherIcon.image = UIImage(data: data)
+                        }
                     }
                 }
             }
+//            weatherGetter.getWeatherIcon(icon: (self.temperature?.tempIcon)!) { (data) in
+//                if let data = data {
+//                    DispatchQueue.main.async {
+//                        self.weatherIcon.image = UIImage(data: data)
+//                    }
+//                }
+//            }
+           
         }
     }
     var timeOfForecast: String?{
@@ -186,14 +206,14 @@ class SingleForecastCell: UICollectionViewCell{
         fatalError("init(coder:) has not been implemented")
     }
     
-    let weatherIcon: UIImageView = {
+    private let weatherIcon: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage()
         iv.contentMode = .scaleAspectFill
         return iv
     }()
     
-    let temp: UILabel = {
+    private let temp: UILabel = {
         let tv = UILabel()
         tv.font = UIFont(name: "HelveticaNeue-Thin", size: 25)
         tv.backgroundColor = .clear
@@ -201,7 +221,7 @@ class SingleForecastCell: UICollectionViewCell{
         return tv
     }()
     
-    let time: UILabel = {
+    private let time: UILabel = {
         let tv = UILabel()
         tv.font = UIFont(name: "HelveticaNeue-Light", size: 16)
         tv.backgroundColor = .clear
@@ -209,7 +229,7 @@ class SingleForecastCell: UICollectionViewCell{
         return tv
     }()
     
-    func setupViews() {
+    private func setupViews() {
         backgroundColor = .clear
         [time, weatherIcon, temp].forEach {addSubview($0)}
         time.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trail: trailingAnchor, size: .init(width: 0, height: 20))
