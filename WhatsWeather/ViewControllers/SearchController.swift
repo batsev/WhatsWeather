@@ -28,7 +28,7 @@ class SearchController: UIViewController, UISearchBarDelegate, UITableViewDataSo
     
     private func setupNavBar(){
         searchBar.becomeFirstResponder()
-        searchBar.searchBarStyle = UISearchBarStyle.prominent
+        searchBar.searchBarStyle = UISearchBar.Style.prominent
         searchBar.placeholder = "Search..."
         searchBar.sizeToFit()
         searchBar.isTranslucent = false

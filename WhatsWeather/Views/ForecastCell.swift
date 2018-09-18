@@ -73,14 +73,14 @@ class ForecastCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        guard let cellCount = forecastTemperature?.forecast.count else {return UIEdgeInsetsMake(0, 0, 0, 0)}
+        guard let cellCount = forecastTemperature?.forecast.count else {return UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)}
         if cellCount < 8 {
             let cellWidth = 50
             let cellSpacing = 10
             let edgeInset = CGFloat((cellWidth + cellSpacing)/2)
-            return UIEdgeInsetsMake(0, edgeInset*(6 - CGFloat(cellCount)) + CGFloat(cellSpacing/2), 0, 0)
+            return UIEdgeInsets.init(top: 0, left: edgeInset*(6 - CGFloat(cellCount)) + CGFloat(cellSpacing/2), bottom: 0, right: 0)
         } else {
-        return UIEdgeInsetsMake(0, 0, 0, 0)
+        return UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         }
     }
     

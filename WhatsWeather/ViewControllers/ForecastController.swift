@@ -58,7 +58,7 @@ class ForecastController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.decelerationRate = UIScrollViewDecelerationRateFast
+        collectionView?.decelerationRate = UIScrollView.DecelerationRate.fast
         collectionView?.backgroundColor = UIColor(white: 1, alpha: 0.9)
         let layout = UltravisualLayout()
         collectionView!.collectionViewLayout = layout
