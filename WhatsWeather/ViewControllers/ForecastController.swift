@@ -12,8 +12,9 @@ class ForecastController: UICollectionViewController {
     
     private let colors = UIColor.palette()
     private let apiClient = APIClient()
+    var forecast: [ForecastTemperature]?
     
-    var temperature: Temperature?{
+    var temperature: Temperature!{
         didSet{
             guard let cityName = temperature?.city else {return}
             let request = ForecastRequest(name: cityName)
@@ -54,11 +55,9 @@ class ForecastController: UICollectionViewController {
         }
     }
     
-    var forecast: [ForecastTemperature]?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.decelerationRate = UIScrollViewDecelerationRateFast
+        collectionView?.decelerationRate = UIScrollView.DecelerationRate.fast
         collectionView?.backgroundColor = UIColor(white: 1, alpha: 0.9)
         let layout = UltravisualLayout()
         collectionView!.collectionViewLayout = layout

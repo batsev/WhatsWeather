@@ -10,7 +10,7 @@ import UIKit
 
 class CurrentWeatherController: UICollectionViewController, UICollectionViewDelegateFlowLayout, AddCityProtocol{
     
-    var weatherArray = [Temperature]()
+    var weatherViewModels = [WeatherViewModel]()
     var coreDataArray = [MyWeather]()
     let colors = UIColor.palette()
     private let apiClient = APIClient()
@@ -19,8 +19,8 @@ class CurrentWeatherController: UICollectionViewController, UICollectionViewDele
         let context = PersistenceManager.shared.context
         _ = MyWeather.createMyWeather(on: valueSent, with: context)
         PersistenceManager.shared.save()
-        self.weatherArray.append(valueSent)
-        let insertedIndexPath = IndexPath(item: weatherArray.count - 1, section: 0)
+        self.weatherViewModels.append(WeatherViewModel(weather: valueSent))
+        let insertedIndexPath = IndexPath(item: weatherViewModels.count - 1, section: 0)
         DispatchQueue.main.async {
             self.collectionView?.insertItems(at: [insertedIndexPath])
 
@@ -35,7 +35,7 @@ class CurrentWeatherController: UICollectionViewController, UICollectionViewDele
         settingUpCollectionView()
     }
     
-    func settingUpTranslucentNavBar(){
+    private func settingUpTranslucentNavBar(){
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
@@ -61,14 +61,14 @@ class CurrentWeatherController: UICollectionViewController, UICollectionViewDele
         }
     }
     
-    let backgroundImageView: UIImageView = {
+    private let backgroundImageView: UIImageView = {
         let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
         backgroundImage.image = UIImage(named: "backgroundView")
         backgroundImage.contentMode = .scaleAspectFill
         return backgroundImage
     }()
     
-    func settingUpCollectionView(){
+    private func settingUpCollectionView(){
         collectionView?.backgroundColor = .clear
         view.setGradientBackground(colorOne: colors[0], colorTwo: colors[4])
         collectionView?.alwaysBounceVertical = true
@@ -81,12 +81,13 @@ class CurrentWeatherController: UICollectionViewController, UICollectionViewDele
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return weatherArray.count
+        return weatherViewModels.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CurrentWeatherCell.identifier, for: indexPath) as! CurrentWeatherCell
-        cell.temperature = weatherArray[indexPath.item]
+        //cell.temperature = weatherViewModels[indexPath.item]
+        cell.weatherViewModel = weatherViewModels[indexPath.item]
         cell.delegate = self
         return cell
     }
@@ -104,15 +105,14 @@ class CurrentWeatherController: UICollectionViewController, UICollectionViewDele
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let forecastController = ForecastController(collectionViewLayout: UltravisualLayout())
-        forecastController.temperature = weatherArray[indexPath.item]
+        forecastController.temperature = weatherViewModels[indexPath.item]
         forecastController.modalTransitionStyle = .flipHorizontal
         self.present(forecastController, animated: true, completion: nil)
     }
     
-    func fetchWeather(){
+    private func fetchWeather(){
         let myWeather = PersistenceManager.shared.fetch(MyWeather.self)
         self.coreDataArray = myWeather
-        //var networkCallsDone = 0
         myWeather.forEach({
             guard let city = $0.city else {return}
             let request = WeatherRequest(name: city)
@@ -122,28 +122,11 @@ class CurrentWeatherController: UICollectionViewController, UICollectionViewDele
                 let countryName = temp.sys.country
                 guard let weatherIcon = temp.weather.first?.icon, let weatherDiscription = temp.weather.first?.description  else {return}
                 let temperature = Temperature(city: cityName, cityTemperature: cityTemp, tempIcon: weatherIcon, country: countryName, weatherDescription: weatherDiscription)
-                self.weatherArray.append(temperature)
+                self.weatherViewModels.append(WeatherViewModel(weather: temperature))
                 DispatchQueue.main.async {
                     self.collectionView?.reloadData()
                 }
             }
-//            weatherGetter.getWeather(city: city) { (temp) in
-//                networkCallsDone += 1
-//                guard let temp = temp else {
-//                    if networkCallsDone == myWeather.count{
-//                        DispatchQueue.main.async {
-//                            self.collectionView?.reloadData()
-//                        }
-//                    }
-//                    return
-//                }
-//                self.weatherArray.append(temp)
-//                if networkCallsDone == myWeather.count {
-//                    DispatchQueue.main.async {
-//                        self.collectionView?.reloadData()
-//                    }
-//                }
-//            }
         })
     }
 }
@@ -154,7 +137,7 @@ extension CurrentWeatherController: CurrentWeatherCellDelegate {
             let objectToDelete = coreDataArray[indexPath.item]
             PersistenceManager.shared.context.delete(objectToDelete)
             PersistenceManager.shared.save()
-            weatherArray.remove(at: indexPath.item)
+            weatherViewModels.remove(at: indexPath.item)
             collectionView?.deleteItems(at: [indexPath])
         }
     }

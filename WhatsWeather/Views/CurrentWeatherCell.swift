@@ -16,24 +16,36 @@ class CurrentWeatherCell: UICollectionViewCell{
     
     weak var delegate: CurrentWeatherCellDelegate?
     
-    private let apiClient = APIClient()
-    
-    var temperature: Temperature? {
+    var weatherViewModel: WeatherViewModel!{
         didSet{
-            self.cityName.text = self.temperature?.city
-            self.temp.text = self.temperature?.cityTemperature
-            if let icon = self.temperature?.tempIcon {
-            apiClient.iconGetter(icon: icon) { (data) in
-                DispatchQueue.main.async {
-                    if let data = data {
-                    self.weatherImage.image = UIImage(data: data)
-                    }
-                }
-            }
+            self.cityName.text = weatherViewModel.city
+            self.temp.text = weatherViewModel.temperature
+            weatherViewModel.fetchIcon { [unowned self] iv in
+                self.weatherImage.image = iv
             }
             deleteButton.isHidden = true
+            
         }
     }
+    
+    //private let apiClient = APIClient()
+    
+//    var temperature: Temperature? {
+//        didSet{
+//            self.cityName.text = self.temperature?.city
+//            self.temp.text = self.temperature?.cityTemperature
+//            if let icon = self.temperature?.tempIcon {
+//            apiClient.iconGetter(icon: icon) { (data) in
+//                DispatchQueue.main.async {
+//                    if let data = data {
+//                    self.weatherImage.image = UIImage(data: data)
+//                    }
+//                }
+//            }
+//            }
+//            deleteButton.isHidden = true
+//        }
+//    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -54,7 +66,7 @@ class CurrentWeatherCell: UICollectionViewCell{
         return tv
     }()
     
-    private let weatherImage: UIImageView = {
+    private var weatherImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         return imageView
