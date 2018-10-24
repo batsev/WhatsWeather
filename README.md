@@ -1,5 +1,5 @@
 # WhatsWeather
-<img src="https://cdn.discordapp.com/attachments/484066257000333336/504587628503629844/Your_App_Icon.png" width=100>
+<img src="https://cdn.discordapp.com/attachments/484066257000333336/504587628503629844/Your_App_Icon.png" width=250>
 Weather app for iOS using OpenWeather API and CoreData for saving user progress.
 
 ## Screenshots
